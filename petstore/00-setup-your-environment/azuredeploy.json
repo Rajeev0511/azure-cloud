@@ -3,15 +3,15 @@
     "contentVersion": "1.0.0.0",
     "parameters": {
         "sites_azurepetstore_name": {
-            "defaultValue": "youraliasazurepetstore",
+            "defaultValue": "azurepetstore-l2-raj",
             "type": "String"
         },
         "serverfarms_azurepetstoreasp_name": {
-            "defaultValue": "youraliasazurepetstoreasp",
+            "defaultValue": "azurepetstoreasp",
             "type": "String"
         },
         "registries_azurepetstorecr_name": {
-            "defaultValue": "youraliasazurepetstorecr",
+            "defaultValue": "azurepetstorecrraj",
             "type": "String"
         }
     },
@@ -21,7 +21,7 @@
             "type": "Microsoft.ContainerRegistry/registries",
             "apiVersion": "2020-11-01-preview",
             "name": "[parameters('registries_azurepetstorecr_name')]",
-            "location": "eastus",
+            "location": "Canada Central",
             "sku": {
                 "name": "Standard",
                 "tier": "Standard"
@@ -55,12 +55,12 @@
             "type": "Microsoft.Web/serverfarms",
             "apiVersion": "2018-02-01",
             "name": "[parameters('serverfarms_azurepetstoreasp_name')]",
-            "location": "East US",
+            "location": "Canada Central",
             "sku": {
-                "name": "P1v2",
-                "tier": "PremiumV2",
-                "size": "P1v2",
-                "family": "Pv2",
+                "name": "S1",
+                "tier": "Standard",
+                "size": "Standard S1",
+                "family": "Pv3",
                 "capacity": 1
             },
             "kind": "linux",
@@ -79,7 +79,7 @@
             "type": "Microsoft.Web/sites",
             "apiVersion": "2018-11-01",
             "name": "[parameters('sites_azurepetstore_name')]",
-            "location": "East US",
+            "location": "Canada Central",
             "dependsOn": [
                 "[resourceId('Microsoft.Web/serverfarms', parameters('serverfarms_azurepetstoreasp_name'))]"
             ],
@@ -117,7 +117,7 @@
             "type": "Microsoft.Web/sites/config",
             "apiVersion": "2018-11-01",
             "name": "[concat(parameters('sites_azurepetstore_name'), '/web')]",
-            "location": "East US",
+            "location": "Canada Central",
             "dependsOn": [
                 "[resourceId('Microsoft.Web/sites', parameters('sites_azurepetstore_name'))]"
             ],
@@ -146,7 +146,7 @@
                 "scmType": "None",
                 "use32BitWorkerProcess": true,
                 "webSocketsEnabled": false,
-                "alwaysOn": true,
+                "alwaysOn": false,
                 "managedPipelineMode": "Integrated",
                 "virtualApplications": [
                     {
@@ -190,7 +190,7 @@
             "type": "Microsoft.Web/sites/hostNameBindings",
             "apiVersion": "2018-11-01",
             "name": "[concat(parameters('sites_azurepetstore_name'), '/', parameters('sites_azurepetstore_name'), '.azurewebsites.net')]",
-            "location": "East US",
+            "location": "Canada Central",
             "dependsOn": [
                 "[resourceId('Microsoft.Web/sites', parameters('sites_azurepetstore_name'))]"
             ],
