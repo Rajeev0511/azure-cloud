@@ -39,7 +39,7 @@ stages:
   - job: Build
     displayName: Build App
     pool:
-      name: 'azuredevopspool'
+      name: 'Default'
     steps:
     - script: echo -n -e "{\"version\":\"$(Build.BuildNumber) - $(tag)\"}" > petstore/petstorepetservice/src/main/resources/version.json
 
@@ -78,7 +78,7 @@ stages:
   - deployment: Deploy
     displayName: Deploy App
     pool:
-      name: 'azuredevopspool'
+      name: 'Default'
     environment: 'Development'
     strategy:
       runOnce:
