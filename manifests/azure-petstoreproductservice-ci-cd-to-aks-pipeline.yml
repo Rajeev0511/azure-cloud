@@ -16,12 +16,12 @@ resources:
 variables:
 
   # Container registry service connection established during pipeline creation
-  dockerRegistryServiceConnection: 'azurepetstoremecr'
+  dockerRegistryServiceConnection: '7fcda361-0614-4bbf-b497-9d1ac2c24f0b'
   imageRepository: 'petstoreproductservice'
-  containerRegistry: 'azurepetstoremecr.azurecr.io'
+  containerRegistry: 'azurepetstorecrl2raj.azurecr.io'
   dockerfilePath: 'petstore/petstoreproductservice/Dockerfile'
   tag: '$(Build.BuildId)'
-  imagePullSecret: '$(crImagePullSecretGlobalV2)'
+  imagePullSecret: 'azurepetstorecrl2raj4aa9-auth'
 
 stages:
 - stage: Build
@@ -43,19 +43,19 @@ stages:
     steps:
     - script: echo -n -e "{\"version\":\"$(Build.BuildNumber) - $(tag)\"}" > petstore/petstoreproductservice/src/main/resources/version.json
 
-    - task: Maven@3
-      continueOnError: true 
-      displayName: Build Spring Boot Jar
-      inputs:
-        mavenPomFile: 'petstore/petstoreproductservice/pom.xml'
-        mavenOptions: '-Xmx3072m'
-        javaHomeOption: 'JDKVersion'
-        jdkVersionOption: '8'
-        jdkArchitectureOption: 'x64'
-        publishJUnitResults: true
-        testResultsFiles: 'petstore/petstoreproductservice/target/surefire-reports/TEST-*.xml'
-        codeCoverageToolOption: 'jaCoCo'
-        goals: 'package'
+    # - task: Maven@3
+    #   continueOnError: true 
+    #   displayName: Build Spring Boot Jar
+    #   inputs:
+    #     mavenPomFile: 'petstore/petstoreproductservice/pom.xml'
+    #     mavenOptions: '-Xmx3072m'
+    #     javaHomeOption: 'JDKVersion'
+    #     jdkVersionOption: '8'
+    #     jdkArchitectureOption: 'x64'
+    #     publishJUnitResults: true
+    #     testResultsFiles: 'petstore/petstoreproductservice/target/surefire-reports/TEST-*.xml'
+    #     codeCoverageToolOption: 'jaCoCo'
+    #     goals: 'package'
     - task: Docker@2
       displayName: Build and push an image to container registry
       inputs:
@@ -88,7 +88,7 @@ stages:
             displayName: Deploy to Kubernetes cluster
             inputs:
               action: deploy
-              kubernetesServiceConnection: azurepetstoreservices-akscluster
+              kubernetesServiceConnection: '9a021a49-31f6-4754-a5c8-3fd1b630fc9c'
               namespace: petstore
               manifests: |
                 $(Pipeline.Workspace)/manifests/petstoreproductservice-deployment-everything-enabled.yml
@@ -98,18 +98,18 @@ stages:
               containers: |
                 $(containerRegistry)/$(imageRepository):$(tag)
                 
-- stage: Automation
-  displayName: Automation stage
-  jobs: 
-  - job: Automation
-    displayName: Automation Testing
-    pool:
-      vmImage: 'windows-latest'
-    steps:
-        - task: TriggerPipeline@1
-          inputs:
-            serviceConnection: 'Automation'
-            project: '6b3206dd-90b3-40f6-a611-e5a1e5a13593'
-            Pipeline: 'Build'
-            buildDefinition: 'azure-petstoreautomation-regression-tests'
-            Branch: 'main'
+# - stage: Automation
+#   displayName: Automation stage
+#   jobs: 
+#   - job: Automation
+#     displayName: Automation Testing
+#     pool:
+#       vmImage: 'windows-latest'
+#     steps:
+#         - task: TriggerPipeline@1
+#           inputs:
+#             serviceConnection: 'Automation'
+#             project: '6b3206dd-90b3-40f6-a611-e5a1e5a13593'
+#             Pipeline: 'Build'
+#             buildDefinition: 'azure-petstoreautomation-regression-tests'
+#             Branch: 'main'
