@@ -16,12 +16,12 @@ resources:
 variables:
 
   # Container registry service connection established during pipeline creation
-  dockerRegistryServiceConnection: '$(dockerRegistryServiceConnection)'
+  dockerRegistryServiceConnection: '7fcda361-0614-4bbf-b497-9d1ac2c24f0b'
   imageRepository: 'petstoreorderservice'
   containerRegistry: 'azurepetstorecrl2raj.azurecr.io'
   dockerfilePath: 'petstore/petstoreorderservice/Dockerfile'
   tag: '$(Build.BuildId)'
-  imagePullSecret: '$(imagePullSecret)'
+  imagePullSecret: 'azurepetstorecrl2raj4aa9-auth'
 
 stages:
 - stage: Build
@@ -88,7 +88,7 @@ stages:
             displayName: Deploy to Kubernetes cluster
             inputs:
               action: deploy
-              kubernetesServiceConnection: '$(kubernetesServiceConnection)'
+              kubernetesServiceConnection: '9a021a49-31f6-4754-a5c8-3fd1b630fc9c'
               namespace: petstore
               manifests: |
                 $(Pipeline.Workspace)/manifests/petstoreorderservice-deployment-everything-enabled.yml
